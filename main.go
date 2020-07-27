@@ -63,12 +63,26 @@ func messageHandler(session *discordgo.Session, message *discordgo.MessageCreate
 
 	if message.Content == "ping" {
 		if message.Author.String() == "cactusapple#2171" {
-			session.ChannelMessageSend(message.ChannelID, "fuck you Matt. Go pick up your package.")
+			session.ChannelMessageSend(message.ChannelID, "pongers.")
 			return
 		}
 		_, _ = session.ChannelMessageSend(message.ChannelID, "hello "+message.Author.Mention())
 	}
 
+	if strings.HasPrefix(strings.ToLower(message.Content), "!") {
+		if strings.Contains(strings.ToLower(message.Content), "spells") {
+			models.GetSpells(session, message)
+			return
+		}
+		if strings.Contains(strings.ToLower(message.Content), "news") {
+			models.GetNews(session, message)
+			return
+		}
+		if strings.Contains(strings.ToLower(message.Content), "next") {
+			models.NextNewsArticle(session, message)
+			return
+		}
+	}
 	if strings.Contains(strings.ToLower(message.Content), "hello") {
 		session.ChannelMessageSend(message.ChannelID, "https://giphy.com/gifs/mrw-top-escalator-Nx0rz3jtxtEre")
 		return
