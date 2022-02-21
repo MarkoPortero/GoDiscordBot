@@ -1,32 +1,34 @@
 package handlers
 
 import (
+	"GoDiscordBot/GlobalVariables"
 	"GoDiscordBot/models"
 	"fmt"
+	"math/rand"
+	"strconv"
+	"time"
+
 	"strings"
 
 	"github.com/bwmarrin/discordgo"
 )
 
 var (
-	BotID   string
 	Place   string
 	Country string
 )
 
 func MessageHandler(session *discordgo.Session, message *discordgo.MessageCreate) {
-	if message.Author.ID == BotID {
+	if message.Author.ID == GlobalVariables.BotID {
 		return
 	}
 
+	fmt.Println("AUTHOR ID " + message.Author.ID)
+	fmt.Println("BOT ID " + GlobalVariables.BotID)
 	fmt.Println(message.Author)
 	fmt.Println(message.Content)
 
 	if message.Content == "ping" {
-		if message.Author.String() == "cactusapple#2171" {
-			session.ChannelMessageSend(message.ChannelID, "pongers.")
-			return
-		}
 		_, _ = session.ChannelMessageSend(message.ChannelID, "hello "+message.Author.Mention())
 		return
 	}
@@ -51,38 +53,113 @@ func MessageHandler(session *discordgo.Session, message *discordgo.MessageCreate
 			models.RemindMe(session, message, ToRemind, ToRemindPing)
 			return
 		}
+		if doesMessageContain(message, "help") {
+			models.HelpCommand(session, message)
+			return
+		}
+
+		if doesMessageContain(message, "nsfwlists") {
+			models.NsfwHelp(session, message)
+			return
+		}
+		if doesMessageContain(message, "weather in") {
+			breakDown := strings.Split(strings.ToLower(message.Content), "weather in ")
+			if len(breakDown) > 1 {
+				Place = breakDown[1]
+				models.WeatherApiConsumer(session, message, Place)
+			}
+			return
+		}
+
+		if doesMessageContain(message, "dog") {
+			models.DoggyStyle(session, message)
+			return
+		}
+
+		if doesMessageContain(message, "coronavirus in") {
+			breakDown := strings.Split(strings.ToLower(message.Content), "coronavirus in")
+			if len(breakDown) > 1 {
+				Country = breakDown[1]
+				models.CoronavirusStats(session, message, Country)
+			}
+			return
+		}
+
+		if doesMessageContain(message, "bored") {
+			models.Bored(session, message)
+			return
+		}
+
+		if doesMessageContain(message, "personality") {
+			breakDown := strings.Split(strings.ToLower(message.Content), "personality")
+			if len(breakDown) > 1 {
+				personality := breakDown[1]
+				fmt.Println("attempting to set personality: " + personality)
+				models.PersonalityTransfer(session, message, personality)
+			}
+			return
+		}
+
+		if doesMessageContain(message, "schedulefactson") {
+			breakDown := strings.Split(strings.ToLower(message.Content), "schedulefactson")
+			if len(breakDown) > 1 {
+				go func() {
+					GlobalVariables.ScheduledFactStatus = true
+					for GlobalVariables.ScheduledFactStatus {
+						models.GetFact(session, message)
+						time.Sleep(5 * time.Minute)
+					}
+				}()
+			}
+		}
+
+		if doesMessageContain(message, "schedulefactsoff") {
+			GlobalVariables.ScheduledFactStatus = false
+		}
+
+		if doesMessageContain(message, "scheduleon") {
+			go func() {
+				for GlobalVariables.ScheduleMessageStatus {
+					GlobalVariables.ScheduleMessageStatus = true
+					impersonateSomeone(session, message)
+					time.Sleep(5 * time.Minute)
+				}
+			}()
+		}
+
+		if doesMessageContain(message, "ScheduleOff") {
+			GlobalVariables.ScheduleMessageStatus = false
+			session.ChannelMessageSend(message.ChannelID, "alright then")
+		}
+
+		if doesMessageContain(message, "fact") {
+			models.GetFact(session, message)
+		}
+
+		if doesMessageContain(message, "reddit") {
+			models.GetRedditPost(session, message)
+		}
 	}
+
 	if doesMessageContain(message, "hello") {
 		session.ChannelMessageSend(message.ChannelID, "https://giphy.com/gifs/mrw-top-escalator-Nx0rz3jtxtEre")
 		return
 	}
 
-	if doesMessageContain(message, "weather in") {
-		breakDown := strings.Split(strings.ToLower(message.Content), "weather in ")
-		if len(breakDown) > 1 {
-			Place = breakDown[1]
-			models.WeatherApiConsumer(session, message, Place)
-		}
+	if doesMessageContain(message, "dino") || doesMessageContain(message, "mark") || doesMessageContain(message, "tommy") || doesMessageContain(message, "matt") || doesMessageContain(message, "chris") || doesMessageContain(message, "gerrit") {
+		impersonateSomeone(session, message)
 		return
 	}
 
-	if doesMessageContain(message, "dog") {
-		models.DoggyStyle(session, message)
-		return
-	}
+}
 
-	if doesMessageContain(message, "coronavirus in") {
-		breakDown := strings.Split(strings.ToLower(message.Content), "coronavirus in")
-		if len(breakDown) > 1 {
-			Country = breakDown[1]
-			models.CoronavirusStats(session, message, Country)
-		}
-		return
-	}
-
-	if doesMessageContain(message, "bored") {
-		models.Bored(session, message)
-		return
+func impersonateSomeone(session *discordgo.Session, message *discordgo.MessageCreate) {
+	min := 1
+	max := 6
+	linesToPrint := rand.Intn(max-min) + min
+	fmt.Println("lines: " + strconv.Itoa(linesToPrint))
+	for i := 0; i < linesToPrint; i++ {
+		models.Impersonate(session, message)
 	}
 }
 

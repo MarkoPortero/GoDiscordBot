@@ -1,0 +1,13 @@
+Hi, I am an helpful bot. I can do many things.
+
+The following commands are ACCEPTABLE:
+ping
+!spells
+!news
+!next
+hello
+!weather in
+!dog
+!coronavirus in
+!bored
+!nsfwlists
