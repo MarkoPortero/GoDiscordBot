@@ -111,10 +111,12 @@ func MessageHandler(session *discordgo.Session, message *discordgo.MessageCreate
 					}
 				}()
 			}
+			return
 		}
 
 		if doesMessageContain(message, "schedulefactsoff") {
 			GlobalVariables.ScheduledFactStatus = false
+			return
 		}
 
 		if doesMessageContain(message, "scheduleon") {
@@ -125,19 +127,33 @@ func MessageHandler(session *discordgo.Session, message *discordgo.MessageCreate
 					time.Sleep(5 * time.Minute)
 				}
 			}()
+			return
 		}
 
 		if doesMessageContain(message, "ScheduleOff") {
 			GlobalVariables.ScheduleMessageStatus = false
 			session.ChannelMessageSend(message.ChannelID, "alright then")
+			return
 		}
 
 		if doesMessageContain(message, "fact") {
 			models.GetFact(session, message)
+			return
 		}
 
 		if doesMessageContain(message, "reddit") {
 			models.GetRedditPost(session, message)
+			return
+		}
+
+		if doesMessageContain(message, "captainslog") {
+			models.StoreCaptainsLogs(session, message)
+			return
+		}
+
+		if doesMessageContain(message, "readmylog") {
+			models.ReadCaptainsLogs(session, message)
+			return
 		}
 	}
 
@@ -150,7 +166,6 @@ func MessageHandler(session *discordgo.Session, message *discordgo.MessageCreate
 		impersonateSomeone(session, message)
 		return
 	}
-
 }
 
 func impersonateSomeone(session *discordgo.Session, message *discordgo.MessageCreate) {

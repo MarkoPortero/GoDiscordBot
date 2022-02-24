@@ -21,8 +21,8 @@ func GetRedditPost(session *discordgo.Session, message *discordgo.MessageCreate)
 		session.ChannelMessageSend(message.ChannelID, "Subreddit not found or reddits being a wanker.")
 		return
 	}
-	if len(posts.Post.URL) > 0 {
-		session.ChannelMessageSend(message.ChannelID, posts.Post.URL)
+	if len(posts.Post.Permalink) > 0 {
+		session.ChannelMessageSend(message.ChannelID, "https://www.reddit.com"+posts.Post.Permalink)
 	}
 	if len(posts.Post.Title) > 0 {
 		session.ChannelMessageSend(message.ChannelID, posts.Post.Title)
@@ -30,5 +30,7 @@ func GetRedditPost(session *discordgo.Session, message *discordgo.MessageCreate)
 	if len(posts.Post.Body) > 0 {
 		session.ChannelMessageSend(message.ChannelID, posts.Post.Body)
 	}
-
+	if len(posts.Post.URL) > 0 {
+		session.ChannelMessageSend(message.ChannelID, posts.Post.URL)
+	}
 }
