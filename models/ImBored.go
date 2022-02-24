@@ -27,11 +27,23 @@ func Bored(session *discordgo.Session, message *discordgo.MessageCreate) {
 	} else {
 		if err := json.NewDecoder(response.Body).Decode(&record); err != nil {
 			log.Println(err)
+			return
 		}
 		fmt.Println(record)
-		session.ChannelMessageSend(message.ChannelID, "You should "+record.Activity)
+		send, err := session.ChannelMessageSend(message.ChannelID, "You should "+record.Activity)
+		if err != nil {
+			log.Fatal(err)
+			return
+		}
+		log.Println("Correctly sent: ", send)
+
 		if len(record.Link) > 0 {
-			session.ChannelMessageSend(message.ChannelID, "Here's a link "+record.Link)
+			messageSend, err := session.ChannelMessageSend(message.ChannelID, "Here's a link "+record.Link)
+			if err != nil {
+				log.Fatal(err)
+				return
+			}
+			log.Println("Correctly sent: ", messageSend)
 		}
 	}
 }

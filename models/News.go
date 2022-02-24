@@ -48,7 +48,12 @@ func GetNews(session *discordgo.Session, message *discordgo.MessageCreate) {
 			fmt.Println(news)
 
 			if (news.TotalResults) == 0 {
-				session.ChannelMessageSend(message.ChannelID, "Sorry, i'm having trouble finding news articles for that criteria.")
+				send, err := session.ChannelMessageSend(message.ChannelID, "Sorry, i'm having trouble finding news articles for that criteria.")
+				if err != nil {
+					log.Fatal(err)
+					return
+				}
+				log.Println("Correctly sent: ", send)
 				return
 			}
 
@@ -62,13 +67,23 @@ func GetNews(session *discordgo.Session, message *discordgo.MessageCreate) {
 func NextNewsArticle(session *discordgo.Session, message *discordgo.MessageCreate) {
 	currentIterator++
 	if news.TotalResults == 0 || currentIterator == news.TotalResults || currentIterator > news.TotalResults {
-		session.ChannelMessageSend(message.ChannelID, "Sorry, i'm out of news.")
+		send, err := session.ChannelMessageSend(message.ChannelID, "Sorry, i'm out of news.")
+		if err != nil {
+			log.Fatal(err)
+			return
+		}
+		log.Println("Correctly sent: ", send)
 		return
 	}
 	printNewsArticle(session, message)
 }
 
 func printNewsArticle(session *discordgo.Session, message *discordgo.MessageCreate) {
-	session.ChannelMessageSend(message.ChannelID,
+	send, err := session.ChannelMessageSend(message.ChannelID,
 		"Showing article: "+fmt.Sprint(currentIterator+1)+" of "+fmt.Sprint(news.TotalResults)+"\n\n"+news.Articles[currentIterator].Title+"\n\n"+news.Articles[currentIterator].Description+"\n\n"+news.Articles[currentIterator].URL)
+	if err != nil {
+		log.Fatal(err)
+		return
+	}
+	log.Println("Correctly sent: ", send)
 }

@@ -31,7 +31,12 @@ func MongoDbStoreCaptainsLogInDatabase(message *discordgo.MessageCreate) {
 	if err != nil {
 		log.Fatal(err)
 	}
-	defer client.Disconnect(ctx)
+	defer func(client *mongo.Client, ctx context.Context) {
+		err := client.Disconnect(ctx)
+		if err != nil {
+			log.Fatal(err)
+		}
+	}(client, ctx)
 
 	quickstartDatabase := client.Database("MyDatabase")
 	captainsLogCollection := quickstartDatabase.Collection("CaptainsLog")
@@ -63,7 +68,13 @@ func MongoDbReadCaptainsLogInDatabase(message *discordgo.MessageCreate) string {
 	if err != nil {
 		log.Fatal(err)
 	}
-	defer client.Disconnect(ctx)
+	defer func(client *mongo.Client, ctx context.Context) {
+		err := client.Disconnect(ctx)
+		if err != nil {
+			log.Fatal(err)
+			return
+		}
+	}(client, ctx)
 
 	quickstartDatabase := client.Database("MyDatabase")
 	captainsLogCollection := quickstartDatabase.Collection("CaptainsLog")

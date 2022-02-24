@@ -22,6 +22,11 @@ func DoggyStyle(session *discordgo.Session, message *discordgo.MessageCreate) {
 		if err := json.NewDecoder(response.Body).Decode(&record); err != nil {
 			log.Println(err)
 		}
-		session.ChannelMessageSend(message.ChannelID, record.Url)
+		send, err := session.ChannelMessageSend(message.ChannelID, record.Url)
+		if err != nil {
+			log.Fatal(err)
+			return
+		}
+		log.Println("Correctly sent: ", send)
 	}
 }

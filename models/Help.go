@@ -13,7 +13,11 @@ func HelpCommand(session *discordgo.Session, message *discordgo.MessageCreate) {
 		log.Fatal(err)
 	}
 
-	session.ChannelMessageSend(message.ChannelID, string(content))
+	send, err := session.ChannelMessageSend(message.ChannelID, string(content))
+	if err != nil {
+		log.Fatal(err)
+	}
+	log.Println("Correctly sent: ", send)
 }
 
 func NsfwHelp(session *discordgo.Session, message *discordgo.MessageCreate) {
@@ -23,13 +27,23 @@ func NsfwHelp(session *discordgo.Session, message *discordgo.MessageCreate) {
 		log.Fatal(err)
 	}
 
-	session.ChannelMessageSend(message.ChannelID, "```"+string(content)+"```")
-
-	content, err = ioutil.ReadFile("./resources/nsfwhelp2.txt")
-
+	send, err := session.ChannelMessageSend(message.ChannelID, "```"+string(content)+"```")
 	if err != nil {
 		log.Fatal(err)
+		return
+	}
+	log.Println("Correctly sent: ", send)
+
+	content, err = ioutil.ReadFile("./resources/nsfwhelp2.txt")
+	if err != nil {
+		log.Fatal(err)
+		return
 	}
 
-	session.ChannelMessageSend(message.ChannelID, "```"+string(content)+"```")
+	messageSend, err := session.ChannelMessageSend(message.ChannelID, "```"+string(content)+"```")
+	if err != nil {
+		log.Fatal(err)
+		return
+	}
+	log.Println("Correctly sent: ", messageSend)
 }

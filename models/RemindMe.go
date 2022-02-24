@@ -2,6 +2,7 @@ package models
 
 import (
 	"fmt"
+	"log"
 	"strings"
 	"time"
 
@@ -21,16 +22,28 @@ func RemindMe(session *discordgo.Session, message *discordgo.MessageCreate, remi
 		TimeToRemind = breakDown[0]
 		WhatImReminding = breakDown[1]
 		fmt.Println(remind)
-		session.ChannelMessageSend(message.ChannelID, "Certainly. I'll remind you to "+remind+", young Padawan.")
+		send, err := session.ChannelMessageSend(message.ChannelID, "Certainly. I'll remind you to "+remind+", young Padawan.")
+		if err != nil {
+			log.Fatal(err)
+		}
+		log.Println("Correctly sent: ", send)
 	}
 	if strings.Contains(strings.ToLower(TimeToRemind), "minute") {
 		timer1 := time.NewTimer(time.Minute * 1)
 		<-timer1.C
-		session.ChannelMessageSend(message.ChannelID, "Oi, "+ping+", i'm reminding you to "+remind)
+		send, err := session.ChannelMessageSend(message.ChannelID, "Oi, "+ping+", i'm reminding you to "+remind)
+		if err != nil {
+			log.Fatal(err)
+		}
+		log.Println("Correctly sent: ", send)
 	}
 	if strings.Contains(strings.ToLower(TimeToRemind), "hour") {
 		timer1 := time.NewTimer(time.Hour * 1)
 		<-timer1.C
-		session.ChannelMessageSend(message.ChannelID, "Oi, "+ping+", i'm reminding you to "+remind)
+		send, err := session.ChannelMessageSend(message.ChannelID, "Oi, "+ping+", i'm reminding you to "+remind)
+		if err != nil {
+			log.Fatal(err)
+		}
+		log.Println("Correctly sent: ", send)
 	}
 }

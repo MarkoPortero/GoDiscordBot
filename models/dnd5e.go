@@ -44,16 +44,28 @@ func GetSpells(session *discordgo.Session, message *discordgo.MessageCreate) {
 		} else {
 			if err := json.NewDecoder(response.Body).Decode(&Spell); err != nil {
 				log.Println(err)
+				return
 			}
 			fmt.Println(Spell)
 
 			if (spells{}) == Spell {
-				session.ChannelMessageSend(message.ChannelID, "Sorry, i'm having trouble finding that spell.")
+				send, err := session.ChannelMessageSend(message.ChannelID, "Sorry, i'm having trouble finding that spell.")
+				if err != nil {
+					log.Fatal(err)
+					return
+				}
+				log.Println("Correctly sent: ", send)
 				return
 			}
 
-			session.ChannelMessageSend(message.ChannelID,
+			send, err := session.ChannelMessageSend(message.ChannelID,
 				"```Spell name: "+Spell.Name+"\n\nDescription: "+Spell.Desc+"\n\nRange: "+Spell.Range+"\n\nBook Page: "+Spell.Page+"```")
+			if err != nil {
+				log.Fatal(err)
+				return
+			}
+			log.Println("Correctly sent: ", send)
+			return
 		}
 	}
 }

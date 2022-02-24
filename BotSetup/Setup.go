@@ -10,16 +10,16 @@ import (
 const token string = "NzM0MDE2NjQ4NzcxNTM0ODg5.XxLkRg.gMqoU7uapRlz6Ix2UFmDtcWqBVM"
 
 func FullDiscordSetup() {
-	discGo, error, done := SetupBot()
+	discGo, err, done := SetupBot()
 	if done {
 		return
 	}
 
 	discGo.AddHandler(handlers.MessageHandler)
 	//open connection
-	error = discGo.Open()
-	if error != nil {
-		fmt.Println(error.Error())
+	err = discGo.Open()
+	if err != nil {
+		fmt.Println(err.Error())
 		return
 	}
 	fmt.Println("ITS ALIVE")
@@ -30,16 +30,16 @@ func FullDiscordSetup() {
 }
 
 func SetupBot() (*discordgo.Session, error, bool) {
-	discGo, error := discordgo.New("Bot " + token)
-	if error != nil {
-		fmt.Println(error.Error())
+	discGo, err := discordgo.New("Bot " + token)
+	if err != nil {
+		fmt.Println(err.Error())
 		return nil, nil, true
 	}
-	User, error := discGo.User("@me")
-	if error != nil {
-		fmt.Println(error.Error())
+	User, err := discGo.User("@me")
+	if err != nil {
+		panic(err)
 	}
 	GlobalVariables.BotID = User.ID
 	fmt.Println(GlobalVariables.BotID)
-	return discGo, error, false
+	return discGo, err, false
 }

@@ -17,34 +17,54 @@ func Impersonate(session *discordgo.Session, message *discordgo.MessageCreate) {
 	if err != nil {
 		log.Fatal(err)
 	}
-	defer file.Close()
+	defer func(file *os.File) {
+		err := file.Close()
+		if err != nil {
+			log.Fatal(err)
+		}
+	}(file)
 
 	scanner := bufio.NewScanner(file)
 
-	randsource := rand.NewSource(time.Now().UnixNano())
-	randgenerator := rand.New(randsource)
+	randSource := rand.NewSource(time.Now().UnixNano())
+	randGenerator := rand.New(randSource)
 
 	lineNum := 1
 	var pick string
 	for scanner.Scan() {
 		line := scanner.Text()
 
-		roll := randgenerator.Intn(lineNum)
+		roll := randGenerator.Intn(lineNum)
 		if roll == 0 {
 			pick = line
 		}
 
 		lineNum += 1
 	}
-	session.ChannelMessageSend(message.ChannelID, pick)
+	send, err := session.ChannelMessageSend(message.ChannelID, pick)
+	if err != nil {
+		log.Fatal(err)
+		return
+	}
+	log.Println("Correctly sent: ", send)
 }
 
 func PersonalityTransfer(session *discordgo.Session, message *discordgo.MessageCreate, personality string) {
 	if strings.Contains(strings.ToLower(personality), "mark") || strings.Contains(strings.ToLower(personality), "matt") || strings.Contains(strings.ToLower(personality), "chris") || strings.Contains(strings.ToLower(personality), "tommy") || strings.Contains(strings.ToLower(personality), "gerrit") {
 		GlobalVariables.BotPersonality = personality + "Personality.txt"
-		session.ChannelMessageSend(message.ChannelID, "Using stored personality for: "+personality)
+		send, err := session.ChannelMessageSend(message.ChannelID, "Using stored personality for: "+personality)
+		if err != nil {
+			log.Fatal(err)
+			return
+		}
+		log.Println("Correctly sent: ", send)
 	} else {
 		GlobalVariables.BotPersonality = "dinoPersonality.txt"
-		session.ChannelMessageSend(message.ChannelID, "Could not find stored personality for: "+personality+". Reverting to Dinofault.")
+		send, err := session.ChannelMessageSend(message.ChannelID, "Could not find stored personality for: "+personality+". Reverting to Dinofault.")
+		if err != nil {
+			log.Fatal(err)
+			return
+		}
+		log.Println("Correctly sent: ", send)
 	}
 }

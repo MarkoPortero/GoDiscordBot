@@ -32,19 +32,30 @@ func CoronavirusStats(session *discordgo.Session, message *discordgo.MessageCrea
 	} else {
 		if err := json.NewDecoder(response.Body).Decode(&record); err != nil {
 			log.Println(err)
+			return
 		}
 		fmt.Println(record)
 
 		if len(record) == 0 {
-			session.ChannelMessageSend(message.ChannelID, "Sorry, i'm having trouble finding that location. Please try again.")
+			send, err := session.ChannelMessageSend(message.ChannelID, "Sorry, i'm having trouble finding that location. Please try again.")
+			if err != nil {
+				log.Fatal(err)
+				return
+			}
+			log.Println("Correctly sent: ", send)
 			return
 		}
 		currentRecord := record[len(record)-1]
-		mortalityRate = ((float64(currentRecord.Deaths) / float64(currentRecord.Confirmed)) * 100)
+		mortalityRate = (float64(currentRecord.Deaths) / float64(currentRecord.Confirmed)) * 100
 		fmt.Println(mortalityRate)
-		session.ChannelMessageSend(message.ChannelID, "Currently in "+
+		send, err := session.ChannelMessageSend(message.ChannelID, "Currently in "+
 			currentRecord.Country+" there are "+fmt.Sprint(currentRecord.Confirmed)+
 			" confirmed cases. There have been "+fmt.Sprint(currentRecord.Deaths)+
 			" deaths so far. However, a total of "+fmt.Sprint(currentRecord.Recovered)+" have recovered. Mortality rate of "+fmt.Sprintf("%.2f", mortalityRate))
+		if err != nil {
+			log.Fatal(err)
+			return
+		}
+		log.Println("Correctly sent: ", send)
 	}
 }

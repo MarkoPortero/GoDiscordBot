@@ -45,8 +45,12 @@ func WeatherApiConsumer(session *discordgo.Session, message *discordgo.MessageCr
 			} else if record.Main.Temperature > 20 {
 				WeatherDescriptor = "warm"
 			}
-			session.ChannelMessageSend(message.ChannelID, "Currently in "+placeName+" it's "+
+			send, err := session.ChannelMessageSend(message.ChannelID, "Currently in "+placeName+" it's "+
 				record.Weather[0].Description+", at a "+WeatherDescriptor+" "+fmt.Sprint(record.Main.Temperature)+" degrees.")
+			if err != nil {
+				log.Fatal(err)
+			}
+			log.Println("Correctly sent: ", send)
 		}
 
 		fmt.Println(record.Weather)

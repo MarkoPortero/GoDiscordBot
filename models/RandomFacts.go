@@ -30,6 +30,10 @@ func GetFact(session *discordgo.Session, message *discordgo.MessageCreate) {
 		fmt.Println(fact)
 
 		currentIterator = 0
-		session.ChannelMessageSend(message.ChannelID, fact.Text)
+		send, err := session.ChannelMessageSend(message.ChannelID, fact.Text)
+		if err != nil {
+			log.Fatal(err)
+		}
+		log.Println("Correctly sent: ", send)
 	}
 }
