@@ -18,6 +18,7 @@ func StoreCaptainsLogs(session *discordgo.Session, message *discordgo.MessageCre
 func ReadCaptainsLogs(session *discordgo.Session, message *discordgo.MessageCreate) {
 	captainsLog := DataAccess.MongoDbReadCaptainsLogInDatabase(message)
 	send, err := session.ChannelMessageSend(message.ChannelID, captainsLog)
+
 	if err != nil {
 		log.Fatal(err)
 		return

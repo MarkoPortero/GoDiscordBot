@@ -155,6 +155,10 @@ func MessageHandler(session *discordgo.Session, message *discordgo.MessageCreate
 			models.ReadCaptainsLogs(session, message)
 			return
 		}
+
+		/*		if doesMessageContain(message, "quack") {
+				models.Goose(session, message)
+			}*/
 	}
 
 	if doesMessageContain(message, "hello") {

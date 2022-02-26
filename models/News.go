@@ -70,6 +70,7 @@ func NextNewsArticle(session *discordgo.Session, message *discordgo.MessageCreat
 		send, err := session.ChannelMessageSend(message.ChannelID, "Sorry, i'm out of news.")
 		if err != nil {
 			log.Fatal(err)
+
 			return
 		}
 		log.Println("Correctly sent: ", send)
