@@ -50,7 +50,7 @@ func Impersonate(session *discordgo.Session, message *discordgo.MessageCreate) {
 }
 
 func PersonalityTransfer(session *discordgo.Session, message *discordgo.MessageCreate, personality string) {
-	if funcName(personality) {
+	if isValidPersonality(personality) {
 		GlobalVariables.BotPersonality = personality + "Personality.txt"
 		send, err := session.ChannelMessageSend(message.ChannelID, "Using stored personality for: "+personality)
 		if err != nil {
@@ -69,6 +69,6 @@ func PersonalityTransfer(session *discordgo.Session, message *discordgo.MessageC
 	}
 }
 
-func funcName(personality string) bool {
+func isValidPersonality(personality string) bool {
 	return strings.Contains(strings.ToLower(personality), "mark") || strings.Contains(strings.ToLower(personality), "matt") || strings.Contains(strings.ToLower(personality), "chris") || strings.Contains(strings.ToLower(personality), "tommy") || strings.Contains(strings.ToLower(personality), "gerrit") || strings.Contains(strings.ToLower(personality), "dino")
 }
