@@ -20,7 +20,7 @@ spec:
     spec:
       containers:
         - name: gobot
-          image: gobotcontainerregistry.azurecr.io/gobot:#{Release.Artifacts.GoBot.BuildId}#
+          image: squadassistcontainerregistry.azurecr.io/gobot:#{Release.Artifacts.GoBot.BuildId}#
           resources:
             requests:
               cpu: 50m
@@ -31,4 +31,4 @@ spec:
           - name: single-request-reopen
       dnsPolicy: ClusterFirst
       imagePullSecrets:
-        - name: gobotregistrykey
+        - name: squadassistregistrykey
