@@ -5,4 +5,5 @@ var (
 	BotPersonality        string
 	ScheduledFactStatus   bool
 	ScheduleMessageStatus bool
+	MongoUri              string
 )

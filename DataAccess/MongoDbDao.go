@@ -1,6 +1,7 @@
 package DataAccess
 
 import (
+	"GoDiscordBot/GlobalVariables"
 	"context"
 	"fmt"
 	"github.com/bwmarrin/discordgo"
@@ -22,7 +23,7 @@ type CaptainLog struct {
 }
 
 func MongoDbStoreCaptainsLogInDatabase(message *discordgo.MessageCreate) {
-	client, err := mongo.NewClient(options.Client().ApplyURI("mongodb://localhost:27017"))
+	client, err := mongo.NewClient(options.Client().ApplyURI(GlobalVariables.MongoUri))
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -59,7 +60,7 @@ func MongoDbStoreCaptainsLogInDatabase(message *discordgo.MessageCreate) {
 }
 
 func MongoDbReadCaptainsLogInDatabase(message *discordgo.MessageCreate) string {
-	client, err := mongo.NewClient(options.Client().ApplyURI("mongodb://localhost:27017"))
+	client, err := mongo.NewClient(options.Client().ApplyURI(GlobalVariables.MongoUri))
 	if err != nil {
 		log.Fatal(err)
 	}

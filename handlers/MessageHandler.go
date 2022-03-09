@@ -5,6 +5,7 @@ import (
 	"GoDiscordBot/models"
 	"fmt"
 	"math/rand"
+	"os"
 	"strconv"
 	"time"
 
@@ -156,9 +157,17 @@ func MessageHandler(session *discordgo.Session, message *discordgo.MessageCreate
 			return
 		}
 
-		/*		if doesMessageContain(message, "quack") {
-				models.Goose(session, message)
-			}*/
+		if doesMessageContain(message, "envVariables") {
+			for _, env := range os.Environ() {
+				// env is
+				envPair := strings.SplitN(env, "=", 2)
+				key := envPair[0]
+				value := envPair[1]
+
+				fmt.Printf("%s : %s\n", key, value)
+				session.ChannelMessageSend(message.ChannelID, key+" : "+value)
+			}
+		}
 	}
 
 	if doesMessageContain(message, "hello") {

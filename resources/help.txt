@@ -11,3 +11,5 @@ hello
 !coronavirus in
 !bored
 !nsfwlists
+
+v0.01
