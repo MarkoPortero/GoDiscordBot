@@ -158,6 +158,9 @@ func MessageHandler(session *discordgo.Session, message *discordgo.MessageCreate
 		}
 
 		if doesMessageContain(message, "envVariables") {
+			if len(os.Environ()) <= 0 {
+				session.ChannelMessageSend(message.ChannelID, "Sorry, couldn't find any environment variables.")
+			}
 			for _, env := range os.Environ() {
 				// env is
 				envPair := strings.SplitN(env, "=", 2)
