@@ -47,3 +47,17 @@ func NsfwHelp(session *discordgo.Session, message *discordgo.MessageCreate) {
 	}
 	log.Println("Correctly sent: ", messageSend)
 }
+
+func NewsHelp(session *discordgo.Session, message *discordgo.MessageCreate) {
+	content, err := ioutil.ReadFile("./resources/newshelp.txt")
+
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	send, err := session.ChannelMessageSend(message.ChannelID, string(content))
+	if err != nil {
+		log.Fatal(err)
+	}
+	log.Println("Correctly sent: ", send)
+}

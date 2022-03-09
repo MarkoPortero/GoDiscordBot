@@ -37,6 +37,7 @@ type newsArticle struct {
 // GetNews gets news article for location
 func GetNews(session *discordgo.Session, message *discordgo.MessageCreate) {
 	searchCriteria := strings.Split(strings.ToLower(message.Content), "!news")
+	news.Articles = nil
 	if len(searchCriteria) > 1 {
 		response, err := http.Get("https://newsapi.org/v2/top-headlines?country=" + strings.Trim(searchCriteria[1], " ") + "&apiKey=323f3e846e014d03a7fe84bcce50016a")
 		if err != nil {
