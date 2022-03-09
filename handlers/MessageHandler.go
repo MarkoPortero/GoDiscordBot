@@ -63,8 +63,8 @@ func MessageHandler(session *discordgo.Session, message *discordgo.MessageCreate
 			models.NsfwHelp(session, message)
 			return
 		}
-		if doesMessageContain(message, "weather in") {
-			breakDown := strings.Split(strings.ToLower(message.Content), "weather in ")
+		if doesMessageContain(message, "weather") {
+			breakDown := strings.Split(strings.ToLower(message.Content), "weather")
 			if len(breakDown) > 1 {
 				Place = breakDown[1]
 				models.WeatherApiConsumer(session, message, Place)
