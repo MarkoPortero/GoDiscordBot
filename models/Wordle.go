@@ -59,18 +59,21 @@ func Guess(session *discordgo.Session, message *discordgo.MessageCreate) {
 		guess = breakDown[1]
 	}
 
+	guess = strings.TrimSpace(guess)
+
 	if len(guess) != 5 {
 		session.ChannelMessageSend(message.ChannelID, "Must be a 5 letter word.")
 		return
 	}
+
 	attemptResult = ""
 	for i := 0; i < len(word); i++ {
 		if word[i] == guess[i] { // correct at the right position
-			attemptResult = ":green_square: " + string(guess[i])
+			attemptResult += ":green_square: " + string(guess[i])
 		} else if strings.ContainsAny(word, string(guess[i])) { // correct at the wrong position
-			attemptResult = ":yellow_square: " + string(guess[i])
+			attemptResult += ":yellow_square: " + string(guess[i])
 		} else { // incorrect
-			attemptResult = ":black_large_square:" + string(guess[i])
+			attemptResult += ":black_large_square:" + string(guess[i])
 		}
 	}
 	session.ChannelMessageSend(message.ChannelID, attemptResult)
