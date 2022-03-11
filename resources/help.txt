@@ -1,6 +1,5 @@
-Hi, I am an helpful bot. I can do many things.
-
 The following commands are ACCEPTABLE:
+
 ping
 !spells
 !news
@@ -12,5 +11,7 @@ hello
 !bored
 !nsfwlists
 !newshelp
+!wordle
+!guess
 
-v0.04
+v0.05

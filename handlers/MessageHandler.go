@@ -171,6 +171,15 @@ func MessageHandler(session *discordgo.Session, message *discordgo.MessageCreate
 				session.ChannelMessageSend(message.ChannelID, key+" : "+value)
 			}
 		}
+
+		if doesMessageContain(message, "wordle") {
+			models.Wordle(session, message)
+			return
+		}
+
+		if doesMessageContain(message, "guess") {
+			models.Wordle(session, message)
+		}
 	}
 
 	if doesMessageContain(message, "hello") {
