@@ -178,7 +178,8 @@ func MessageHandler(session *discordgo.Session, message *discordgo.MessageCreate
 		}
 
 		if doesMessageContain(message, "guess") {
-			models.Wordle(session, message)
+			models.Guess(session, message)
+			return
 		}
 	}
 

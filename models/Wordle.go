@@ -20,10 +20,9 @@ var (
 
 func getWord() string {
 	var (
-		word string
-		i    int
+		i int
 	)
-	words, err := ioutil.ReadFile("./resources/words")
+	words, err := ioutil.ReadFile("./resources/words.txt")
 	if err != nil {
 		fmt.Println("Error:", err)
 		os.Exit(1)
