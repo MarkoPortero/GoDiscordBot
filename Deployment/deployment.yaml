@@ -26,6 +26,11 @@ spec:
               cpu: 50m
             limits:
               cpu: 50m
+          env:
+            - name: BUILD_VERSION
+              value: "#{Release.Artifacts.GoBot.BuildId}#"
+            - name: MONGO_URI
+              value: "mongodb://mongodb.mongodb.gobot.svc.cluster.local:27017"
       dnsConfig:
         options:
           - name: single-request-reopen
