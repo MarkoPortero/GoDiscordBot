@@ -7,7 +7,7 @@ import (
 	"github.com/bwmarrin/discordgo"
 )
 
-const token string = "NzM0MDE2NjQ4NzcxNTM0ODg5.XxLkRg.gMqoU7uapRlz6Ix2UFmDtcWqBVM"
+const token string = "*"
 
 func FullDiscordSetup() {
 	discGo, err, done := SetupBot()
